@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
-import '../../data/datasource/pets_data.dart';
+import 'package:pet_adoption_app/data/datasource/local_datasource/user_local_datasource.dart';
+import 'package:pet_adoption_app/presentation/pages/form_page.dart';
+import '../../data/datasource/local_datasource/pet_local_datasource.dart';
 import '../../data/models/pet.dart';
 import '../widgets/pet_grid_tile.dart';
 
@@ -16,9 +17,8 @@ class _PetsPageState extends State<PetsPage> {
 
   var idControl = TextEditingController();
 
-
-  void _showAddCategoryBottomSheet(BuildContext context) {
-    showModalBottomSheet(
+  Future<void> _showAddCategoryBottomSheet(BuildContext context) async {
+    await showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return Container(
@@ -40,19 +40,22 @@ class _PetsPageState extends State<PetsPage> {
                   prefixIcon: Icon(Icons.title),
                 ),
               ),
-
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   // Get the category name from the TextFormField
-                  String categoryName = titleControl.text;
-                  if (categoryName.isNotEmpty) {
-                    setState(() {
-                      // Add the new category to the list
-                      var pet =Pet(idControl.text,titleControl.text,'assets/images/dog.jpg');
-                      pets.add(pet);
-                    });
-                    // Close the bottom sheet
+                  String petName = titleControl.text;
+                  if (petName.isNotEmpty) {
+                    var pet = Pet(
+                        id: idControl.text,
+                        name: titleControl.text,
+                        imageUrl: 'assets/images/dog2.jpg');
+                    await PetDataImp().getPets().then((value) => print(value));
+                    await PetDataImp().setPet(pet);
+                    await PetDataImp().getPets().then((value) => print(value));
+                    // pets.add(pet);
                     Navigator.of(context).pop();
                   }
                 },
@@ -70,26 +73,53 @@ class _PetsPageState extends State<PetsPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple,
+        actions: [
+          TextButton(
+              onPressed: () {
+                UserDataImp().logout();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => FormPage()));
+              },
+              child: Text(
+                'Log out',
+                style: TextStyle(fontSize: 24, color: Colors.white),
+              ))
+        ],
       ),
       body: Column(
         children: [
           Expanded(
-            child: GridView.builder(
-              gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 8,
-              ),
-              itemBuilder: (BuildContext context, int index) =>PetGridTile(index: index,),
-              itemCount: pets.length,
-            ),
+            child: FutureBuilder(
+                future: PetDataImp().getPets(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else {
+                    return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 8,
+                      ),
+                      itemBuilder: (BuildContext context, int index) =>
+                          PetGridTile(
+                        pet: snapshot.data![index],
+                      ),
+                      itemCount: snapshot.data!.length,
+                    );
+                  }
+                }),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showAddCategoryBottomSheet(context);
+        onPressed: () async {
+          await _showAddCategoryBottomSheet(context);
+          setState(() {});
         },
-        child: Icon(Icons.add,color: Colors.white,),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
         backgroundColor: Colors.purple,
       ),
     );

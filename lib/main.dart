@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:pet_adoption_app/presentation/pages/switch_page.dart';
-import 'package:provider/provider.dart';
+import 'package:pet_adoption_app/presentation/pages/controller_page.dart';
 
-import 'data/models/favorite.dart';
 import 'presentation/pages/form_page.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => FavoritePetsModel(), // Create an instance of your model
-      child: MyApp(),
-    ),
+    MyApp(),
   );
 }
 
@@ -24,10 +19,9 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: SwitchPage());
+        home: FormPage());
   }
 }

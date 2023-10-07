@@ -1,31 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:pet_adoption_app/data/datasource/local_datasource/pet_local_datasource.dart';
 
-import '../../data/datasource/pets_data.dart';
-
+import '../../data/datasource/local_datasource/pet_local_datasource.dart';
 import '../widgets/pet_grid_tile.dart';
 
-class FavoritePage extends StatefulWidget {
-  const FavoritePage({Key? key}) : super(key: key);
+class AdoptPage extends StatefulWidget {
+  const AdoptPage({Key? key}) : super(key: key);
 
   @override
-  State<FavoritePage> createState() => _FavoritePageState();
+  State<AdoptPage> createState() => _AdoptPageState();
 }
 
-class _FavoritePageState extends State<FavoritePage> {
+class _AdoptPageState extends State<AdoptPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple,
         title: Text(
-          'Favorite',
+          'Adopted',
           style: TextStyle(
               fontWeight: FontWeight.bold, fontSize: 24, color: Colors.white),
         ),
       ),
       body: FutureBuilder(
-          future: PetDataImp().getFavoritePets(),
+          future: PetDataImp().getAdoptedPets(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();

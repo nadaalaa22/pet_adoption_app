@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:pet_adoption_app/presentation/pages/adopted_page.dart';
 import 'package:pet_adoption_app/presentation/pages/pets_page.dart';
 
 import 'favorite_page.dart';
 
-class SwitchPage extends StatefulWidget {
-  const SwitchPage({Key? key}) : super(key: key);
+class ControllerPage extends StatefulWidget {
+  const ControllerPage({Key? key}) : super(key: key);
 
   @override
-  State<SwitchPage> createState() => _SwitchPageState();
+  State<ControllerPage> createState() => _ControllerPageState();
 }
 
-class _SwitchPageState extends State<SwitchPage> {
+class _ControllerPageState extends State<ControllerPage> {
   int currentIndex = 0;
 
   @override
@@ -18,10 +19,10 @@ class _SwitchPageState extends State<SwitchPage> {
     return Scaffold(
       body: IndexedStack(
         index: currentIndex,
-        children: [
-
+        children: const [
           PetsPage(),
           FavoritePage(),
+          AdoptPage(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -34,7 +35,7 @@ class _SwitchPageState extends State<SwitchPage> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.set_meal,
+              Icons.pets,
               color: Colors.black54,
             ),
             label: 'Pets',
@@ -45,6 +46,13 @@ class _SwitchPageState extends State<SwitchPage> {
               color: Colors.black54,
             ),
             label: 'Favorite',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.add,
+              color: Colors.black54,
+            ),
+            label: 'Adopted',
           )
         ],
       ),
