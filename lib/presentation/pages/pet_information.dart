@@ -22,6 +22,16 @@ class _PetInformationState extends State<PetInformation> {
           ' ID #  ${widget.petInfo.id}  ${widget.petInfo.name}',
           style: TextStyle(color: Colors.white),
         ),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+            setState(() {});
+          },
+        ),
         actions: [
           IconButton(
             icon: Icon(
@@ -69,7 +79,7 @@ class _PetInformationState extends State<PetInformation> {
                   PetDataImp().togglePetAdopted(widget.petInfo.id);
                   setState(() {
                     Fluttertoast.showToast(
-                      msg: "This is a toast message",
+                      msg: "Adopted successfully",
                       toastLength: Toast.LENGTH_SHORT,
                       // Duration of the toast (short or long)
                       gravity: ToastGravity.BOTTOM,

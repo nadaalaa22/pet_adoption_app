@@ -5,8 +5,9 @@ import '../pages/pet_information.dart';
 
 class PetGridTile extends StatefulWidget {
   final Pet pet;
+  final Function() onTapCallback;
 
-  PetGridTile({super.key, required this.pet});
+  PetGridTile({super.key, required this.pet, required this.onTapCallback});
 
   @override
   State<PetGridTile> createState() => _PetGridTileState();
@@ -18,11 +19,13 @@ class _PetGridTileState extends State<PetGridTile> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(
+        onTap: () async {
+          await Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => PetInformation(petInfo: widget.pet)));
+          setState(() {});
+          widget.onTapCallback();
         },
         child: SizedBox(
           width: 200,

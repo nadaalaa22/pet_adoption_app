@@ -93,16 +93,20 @@ class _PetsPageState extends State<PetsPage> {
                 future: PetDataImp().getPets(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   } else {
                     return GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         mainAxisSpacing: 8,
                       ),
                       itemBuilder: (BuildContext context, int index) =>
                           PetGridTile(
                         pet: snapshot.data![index],
+                        onTapCallback: () {
+                          setState(() {});
+                        },
                       ),
                       itemCount: snapshot.data!.length,
                     );

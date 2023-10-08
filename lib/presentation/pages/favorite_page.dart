@@ -14,6 +14,13 @@ class FavoritePage extends StatefulWidget {
 
 class _FavoritePageState extends State<FavoritePage> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -35,6 +42,9 @@ class _FavoritePageState extends State<FavoritePage> {
               itemBuilder: (_, i) {
                 return PetGridTile(
                   pet: snapshot.data![i],
+                  onTapCallback: () {
+                    setState(() {});
+                  },
                 );
               },
             );

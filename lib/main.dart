@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pet_adoption_app/presentation/pages/controller_page.dart';
+import 'package:pet_adoption_app/presentation/pages/splash_page.dart';
 
 import 'presentation/pages/form_page.dart';
 
@@ -22,6 +23,6 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: FormPage());
+        home: SplashPage());
   }
 }

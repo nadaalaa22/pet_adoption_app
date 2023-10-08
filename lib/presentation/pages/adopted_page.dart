@@ -33,6 +33,9 @@ class _AdoptPageState extends State<AdoptPage> {
               itemBuilder: (_, i) {
                 return PetGridTile(
                   pet: snapshot.data![i],
+                  onTapCallback: () {
+                    setState(() {});
+                  },
                 );
               },
             );
