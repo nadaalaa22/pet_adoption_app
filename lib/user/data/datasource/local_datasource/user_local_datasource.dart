@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../models/user.dart';
+import '../../model/user.dart';
 
 abstract class UserData {
   ///add user data to [sharedPreference]

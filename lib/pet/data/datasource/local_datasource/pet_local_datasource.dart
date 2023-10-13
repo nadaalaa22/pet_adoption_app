@@ -19,16 +19,6 @@ abstract class PetData {
   /// throw an error
   Future<void> togglePetFavorite(String petID);
 
-  ///get [all] [ favorite ] [pet] from  [sharedPreference]
-  ///
-  /// throw an error
-  Future<List<Pet>> getFavoritePets();
-
-  ///get [all] [ Adopted ] [pet] from  [sharedPreference]
-  ///
-  /// throw an error
-  Future<List<Pet>> getAdoptedPets();
-
   Future<void> togglePetAdopted(String petID);
 }
 
@@ -48,6 +38,7 @@ class PetDataImp implements PetData {
   Future<List<Pet>> getPets() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final List<String> petsJson = prefs.getStringList(petsKey) ?? [];
+    print(petsJson);
     List<Pet> pets = [];
     for (int i = 0; i < petsJson.length; i++) {
       final petJson = petsJson[i];
@@ -83,18 +74,6 @@ class PetDataImp implements PetData {
   }
 
   @override
-  Future<List<Pet>> getFavoritePets() async {
-    final pets = await getPets();
-    List<Pet> favoritePets = [];
-    for (int i = 0; i < pets.length; i++) {
-      if (pets[i].isFavorite == true) {
-        favoritePets.add(pets[i]);
-      }
-    }
-    return favoritePets;
-  }
-
-  @override
   Future<void> togglePetAdopted(String petID) async {
     final pets = await getPets();
     Pet? pet;
@@ -115,17 +94,5 @@ class PetDataImp implements PetData {
         await setPet(pet);
       }
     }
-  }
-
-  @override
-  Future<List<Pet>> getAdoptedPets() async {
-    final pets = await getPets();
-    List<Pet> adoptedPets = [];
-    for (int i = 0; i < pets.length; i++) {
-      if (pets[i].isAdopt == true) {
-        adoptedPets.add(pets[i]);
-      }
-    }
-    return adoptedPets;
   }
 }

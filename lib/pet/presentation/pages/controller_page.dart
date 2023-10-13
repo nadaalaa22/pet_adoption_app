@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pet_adoption_app/presentation/pages/adopted_page.dart';
-import 'package:pet_adoption_app/presentation/pages/pets_page.dart';
+import 'package:pet_adoption_app/pet/presentation/pages/adopted_page.dart';
+import 'package:pet_adoption_app/pet/presentation/pages/pets_page.dart';
 
 import 'favorite_page.dart';
 

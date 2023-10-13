@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:pet_adoption_app/presentation/pages/controller_page.dart';
-import 'package:pet_adoption_app/presentation/pages/splash_page.dart';
-
-import 'presentation/pages/form_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pet_adoption_app/pet/presentation/bloc/pet_bloc.dart';
+import 'package:pet_adoption_app/pet/presentation/pages/splash_page.dart';
+import 'package:pet_adoption_app/user/presentation/bloc/user_bloc.dart';
+import 'package:pet_adoption_app/user/presentation/pages/form_page.dart';
 
 void main() {
   runApp(
-    MyApp(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => PetBloc(),
+        ),
+        BlocProvider(
+          create: (context) => UserBloc(),
+        ),
+      ],
+      child: MyApp(),
+    ),
   );
 }
 
@@ -23,6 +34,6 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: SplashPage());
+        home: FormPage());
   }
 }

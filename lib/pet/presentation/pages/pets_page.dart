@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pet_adoption_app/data/datasource/local_datasource/user_local_datasource.dart';
-import 'package:pet_adoption_app/presentation/pages/form_page.dart';
-import '../../data/datasource/local_datasource/pet_local_datasource.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pet_adoption_app/pet/presentation/bloc/pet_bloc.dart';
+import 'package:pet_adoption_app/user/data/datasource/local_datasource/user_local_datasource.dart';
+import 'package:pet_adoption_app/user/presentation/pages/form_page.dart';
+
 import '../../data/models/pet.dart';
 import '../widgets/pet_grid_tile.dart';
 
@@ -22,25 +24,25 @@ class _PetsPageState extends State<PetsPage> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextFormField(
                 controller: titleControl,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   label: Text('Pet Name'),
                   prefixIcon: Icon(Icons.title),
                 ),
               ),
               TextFormField(
                 controller: idControl,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   label: Text(' id'),
                   prefixIcon: Icon(Icons.title),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               ElevatedButton(
@@ -52,20 +54,24 @@ class _PetsPageState extends State<PetsPage> {
                         id: idControl.text,
                         name: titleControl.text,
                         imageUrl: 'assets/images/dog2.jpg');
-                    await PetDataImp().getPets().then((value) => print(value));
-                    await PetDataImp().setPet(pet);
-                    await PetDataImp().getPets().then((value) => print(value));
-                    // pets.add(pet);
+                    context.read<PetBloc>().add(SetPetEvent(pet: pet));
+                    // await PetDataImp().setPet(pet);
                     Navigator.of(context).pop();
                   }
                 },
-                child: Text('Add'),
+                child: const Text('Add'),
               ),
             ],
           ),
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<PetBloc>().add(GetPetEvent());
   }
 
   @override
@@ -78,53 +84,48 @@ class _PetsPageState extends State<PetsPage> {
               onPressed: () {
                 UserDataImp().logout();
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => FormPage()));
+                    MaterialPageRoute(builder: (context) => const FormPage()));
               },
-              child: Text(
+              child: const Text(
                 'Log out',
                 style: TextStyle(fontSize: 24, color: Colors.white),
               ))
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: FutureBuilder(
-                future: PetDataImp().getPets(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else {
-                    return GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 8,
-                      ),
-                      itemBuilder: (BuildContext context, int index) =>
-                          PetGridTile(
-                        pet: snapshot.data![index],
-                        onTapCallback: () {
-                          setState(() {});
-                        },
-                      ),
-                      itemCount: snapshot.data!.length,
-                    );
-                  }
-                }),
-          ),
-        ],
+      body: BlocBuilder<PetBloc, PetState>(
+        builder: (context, state) {
+          print(state);
+          if (state is PetLoadingState) {
+            return const CircularProgressIndicator();
+          } else if (state is PetLoadedState) {
+            print(state.pets.length);
+            return GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 8,
+              ),
+              itemBuilder: (BuildContext context, int index) =>
+                  PetGridTile(
+                    pet: state.pets[index],
+                  ),
+              itemCount: state.pets.length,
+            );
+          }
+          return SizedBox(
+            height: 10,
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await _showAddCategoryBottomSheet(context);
           setState(() {});
         },
-        child: Icon(
+        backgroundColor: Colors.purple,
+        child: const Icon(
           Icons.add,
           color: Colors.white,
         ),
-        backgroundColor: Colors.purple,
       ),
     );
   }
