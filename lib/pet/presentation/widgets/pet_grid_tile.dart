@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../../data/models/pet.dart';
@@ -5,7 +7,6 @@ import '../pages/pet_information.dart';
 
 class PetGridTile extends StatefulWidget {
   final Pet pet;
-
 
   PetGridTile({super.key, required this.pet});
 
@@ -37,11 +38,11 @@ class _PetGridTileState extends State<PetGridTile> {
                   color: Colors.black.withOpacity(0.5),
                   child: Center(
                       child: Text(
-                        widget.pet.name,
-                        style: TextStyle(color: Colors.white, fontSize: 24),
-                      ))),
-              child: Image.asset(
-                widget.pet.imageUrl,
+                    widget.pet.name,
+                    style: TextStyle(color: Colors.white, fontSize: 24),
+                  ))),
+              child: Image.file(
+                File(widget.pet.imageUrl),
                 fit: BoxFit.cover,
               ),
             ),

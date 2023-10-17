@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet_adoption_app/pet/presentation/pages/controller_page.dart';
 import 'package:pet_adoption_app/user/data/model/user.dart';
 import 'package:pet_adoption_app/user/presentation/bloc/user_bloc.dart';
-import '../../data/datasource/local_datasource/user_local_datasource.dart';
 
 class FormPage extends StatefulWidget {
   const FormPage({Key? key}) : super(key: key);
@@ -45,7 +44,7 @@ class _FormPageState extends State<FormPage> {
       }, builder: (context, state) {
         if (state is UserLoadingState) {
           return const CircularProgressIndicator();
-        } else if (state is UserLoadedState) {
+        } else if (state is UserInitial) {
           return Form(
               key: key,
               child: SingleChildScrollView(

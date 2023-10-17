@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pet_adoption_app/pet/presentation/bloc/pet_bloc.dart';
 import 'package:pet_adoption_app/user/data/datasource/local_datasource/user_local_datasource.dart';
 import 'package:pet_adoption_app/user/presentation/pages/form_page.dart';
@@ -53,7 +56,7 @@ class _PetsPageState extends State<PetsPage> {
                     var pet = Pet(
                         id: idControl.text,
                         name: titleControl.text,
-                        imageUrl: 'assets/images/dog2.jpg');
+                        imageUrl: imageFile != null ? imageFile!.path : '');
                     context.read<PetBloc>().add(SetPetEvent(pet: pet));
                     // await PetDataImp().setPet(pet);
                     Navigator.of(context).pop();
@@ -66,6 +69,15 @@ class _PetsPageState extends State<PetsPage> {
         );
       },
     );
+  }
+
+  File? imageFile;
+
+  Future<File?> getImage(ImageSource source) async {
+    XFile? xFile = await ImagePicker().pickImage(source: source);
+    if (xFile != null) {
+      return File(xFile.path);
+    }
   }
 
   @override
@@ -118,8 +130,11 @@ class _PetsPageState extends State<PetsPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          await getImage(ImageSource.gallery).then((value) =>
+              setState(() {
+                imageFile = value;
+              }));
           await _showAddCategoryBottomSheet(context);
-          setState(() {});
         },
         backgroundColor: Colors.purple,
         child: const Icon(

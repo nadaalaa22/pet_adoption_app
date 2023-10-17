@@ -23,7 +23,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         try {
           emit(UserLoadedState(user: userData));
         } catch (e) {
-          return null;
+          emit(UserInitial());
         }
       }
     });

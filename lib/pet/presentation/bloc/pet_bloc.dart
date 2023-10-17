@@ -11,20 +11,26 @@ class PetBloc extends Bloc<PetEvent, PetState> {
   PetBloc() : super(PetInitial()) {
     on<PetEvent>((event, emit) async {
       if (event is SetPetEvent) {
+        emit(PetLoadingState());
         await PetDataImp().setPet(event.pet);
+        List<Pet> pets = await PetDataImp().getPets();
+        emit(PetLoadedState(pets: pets));
+      }
+
+      else if (event is GetPetEvent) {
         emit(PetLoadingState());
         List<Pet> pets = await PetDataImp().getPets();
         emit(PetLoadedState(pets: pets));
-      } else if (event is GetPetEvent) {
-        emit(PetLoadingState());
-        List<Pet> pets = await PetDataImp().getPets();
-        emit(PetLoadedState(pets: pets));
-      } else if (event is SetFavoritePetsEvent) {
+      }
+
+      else if (event is SetFavoritePetsEvent) {
         await PetDataImp().togglePetFavorite(event.id);
         emit(PetLoadingState());
         List<Pet> pets = await PetDataImp().getPets();
         emit(PetLoadedState(pets: pets));
-      } else if (event is SetAdoptedPetsEvent) {
+      }
+
+      else if (event is SetAdoptedPetsEvent) {
         await PetDataImp().togglePetAdopted(event.id);
         emit(PetLoadingState());
         List<Pet> pets = await PetDataImp().getPets();
